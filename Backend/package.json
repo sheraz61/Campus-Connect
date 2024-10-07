@@ -2,9 +2,10 @@
   "name": "campus",
   "version": "1.0.0",
   "description": "campus connect app",
+  "type": "module",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "nodemon src/index.js"
   },
   "keywords": [
     "JS",
@@ -14,5 +15,9 @@
     "JS"
   ],
   "author": "Sheraz Hussain",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.21.0",
+    "mongoose": "^8.7.0"
+  }
 }
