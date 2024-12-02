@@ -1,5 +1,5 @@
 import mongoose ,{Schema} from "mongoose";
-
+import  mongooseAggregatePaginate from 'mongoose-aggregate-paginate-v2'
 const postSchema= new Schema({
 title:{
     type:String,
@@ -17,5 +17,5 @@ owner:{
     ref:"User"
 }
 },{timestampsL:true})
-
+postSchema.plugin(mongooseAggregatePaginate)
 export const Post = mongoose.model("Post",postSchema)
