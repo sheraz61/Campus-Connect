@@ -181,3 +181,26 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
         throw new apiError(401, error?.message || "Unautherized request")
     }
 })
+
+//Change Password
+
+const changePassword= asyncHandler(async(req,res)=>{
+    const {oldPassword, newPassword} = req.body;
+    const user = await User.findById(req.user?._id)
+    if(!user){
+        throw new apiError(401,"User not found")
+    }
+    const isPasswordCorrect = await user.isPasswordCorrect(oldPassword)
+    if(!isPasswordCorrect){
+        throw new apiError(400,"Incorrect old password")
+    }
+    user.password= newPassword
+    await user.save({validateBeforeSave:false})
+
+    return res.status(200).json(
+        new apiResponse(200,{},"Password changed successfully")
+    )
+})
+
+//get Current User
+
