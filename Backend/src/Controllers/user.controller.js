@@ -76,3 +76,46 @@ const registerUser = asyncHandler(async (req, res) => {
         new apiResponse(200, createdUser, 'user created successfully')
     )
 })
+
+//loginUser
+
+const loginUser = asyncHandler(async (req, res) => {
+    const { email, password, userName } = req.body;
+
+    if (!userName && !email) {
+        throw new apiError(400, 'Email or username is required')
+    }
+
+    const user = await User.findOne({
+        $or: [
+            { email }, { userName }
+        ]
+    })
+    if (!user) {
+        throw new apiError(401, 'Invalid credentials')
+    }
+    //password varification
+    const isValidPassword = await user.isPasswordCorrect(password)
+    if (!isValidPassword) {
+        throw new apiError(401, 'Invalid Password')
+    }
+    const { accessToken, refreshToken } = await generateAccessAndRefreshToken(user._id)
+    //hide refresh token and password from user response
+    const loggedInUser = await user.findById(user._id).select("-password -refreshToken")
+    //send cookies
+    const options = {
+        httpOnly: true,
+        secure: true
+    }
+
+    //response 
+    return res.status(200).cookie("accessToken", accessToken, options).cookie("refreshToken", refreshToken, options).json(
+        new apiResponse(
+            200,
+            {
+                user: loggedInUser, accessToken, refreshToken
+            },
+            'User logged in successfully'
+        )
+    )
+})
