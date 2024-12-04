@@ -204,3 +204,29 @@ const changePassword= asyncHandler(async(req,res)=>{
 
 //get Current User
 
+const getCurrentUser= asyncHandler(async(req, res)=>{
+    return res.status(200).json(
+        new apiResponse(200,req.user,"User retrieved successfully")
+    )
+})
+
+
+//updata Account Details
+
+const updateAccountDetails= asyncHandler(async(req,res)=>{
+    const {fullName,email } =req.body
+if(!fullName || !email){
+    throw new apiError(400,"Full Name and Email are required")
+}
+const user = await User.findOneAndUpdate(req.user?._id,{
+    $set:{
+        fullName,
+        email
+    }
+},
+{new:true}
+).select("-password")
+return res.status(200).json(
+    new apiResponse(200,user,"User details updated successfully")
+)
+})
