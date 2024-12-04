@@ -102,20 +102,82 @@ const loginUser = asyncHandler(async (req, res) => {
     const { accessToken, refreshToken } = await generateAccessAndRefreshToken(user._id)
     //hide refresh token and password from user response
     const loggedInUser = await user.findById(user._id).select("-password -refreshToken")
-    //send cookies
+    //send cookies options
     const options = {
         httpOnly: true,
         secure: true
     }
 
     //response 
-    return res.status(200).cookie("accessToken", accessToken, options).cookie("refreshToken", refreshToken, options).json(
-        new apiResponse(
-            200,
-            {
-                user: loggedInUser, accessToken, refreshToken
-            },
-            'User logged in successfully'
+    return res.status(200)
+        .cookie("accessToken", accessToken, options)
+        .cookie("refreshToken", refreshToken, options)
+        .json(
+            new apiResponse(
+                200,
+                {
+                    user: loggedInUser, accessToken, refreshToken
+                },
+                'User logged in successfully'
+            )
         )
+})
+
+//logOut user
+
+const logOutUser = asyncHandler(async (req, res) => {
+    await User.findByIdAndUpdate(req.user._id, {
+        $unset: {
+            refreshToken: 1
+        }
+    },
+        {
+            new: true
+        }
     )
+
+    const options = {
+        httpOnly: true,
+        secure: true
+    }
+
+    res.status(200)
+        .clearCookie("accessToken", options)
+        .clearCookie("refreshToken", options)
+        .json(
+            new apiResponse(200, {}, "User logged out successfully")
+        )
+})
+
+
+//refreshAccessToken
+
+const refreshAccessToken = asyncHandler(async (req, res) => {
+    const inComingRefreshToken = req.cookie.refreshToken || req.body.refreshToken
+    if (!inComingRefreshToken) {
+        throw new apiError(401, "Unautherized request")
+    }
+    try {
+        const decodeToken = jwt.verify(inComingRefreshToken, process.env.REFRESH_TOKEN_SECRET)
+        const user = await User.findById(decodeToken?._id)
+        if (!user) {
+            throw new apiError(401, "Unautherized request")
+        }
+        if (inComingRefreshToken !== user?.refreshToken) {
+            throw new apiError(401, "Refresh token is expired or Used")
+        }
+        const options = {
+            httpOnly: true,
+            secure: true
+        }
+        const { accessToken, newRefreshToken } = await generateAccessAndRefreshToken(user._id)
+        return res.status(200)
+            .cookie("accessToken", accessToken, options)
+            .cookie("refreshToken", newRefreshToken, options)
+            .json(
+                new apiResponse(200, { accessToken, newRefreshToken }, "User access token refreshed successfully")
+            )
+    } catch (error) {
+        throw new apiError(401, error?.message || "Unautherized request")
+    }
 })
