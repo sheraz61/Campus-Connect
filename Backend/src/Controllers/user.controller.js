@@ -156,7 +156,7 @@ const logOutUser = asyncHandler(async (req, res) => {
 //refreshAccessToken
 
 const refreshAccessToken = asyncHandler(async (req, res) => {
-    const inComingRefreshToken = req.cookie.refreshToken || req.body.refreshToken
+    const inComingRefreshToken = req.cookie?.refreshToken || req.body?.refreshToken
     if (!inComingRefreshToken) {
         throw new apiError(401, "Unautherized request")
     }
@@ -173,12 +173,12 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
             httpOnly: true,
             secure: true
         }
-        const { accessToken, newRefreshToken } = await generateAccessAndRefreshToken(user._id)
+        const { accessToken, refreshToken } = await generateAccessAndRefreshToken(user._id)
         return res.status(200)
             .cookie("accessToken", accessToken, options)
-            .cookie("refreshToken", newRefreshToken, options)
+            .cookie("refreshToken", refreshToken, options)
             .json(
-                new apiResponse(200, { accessToken, newRefreshToken }, "User access token refreshed successfully")
+                new apiResponse(200, { accessToken, refreshToken }, "User access token refreshed successfully")
             )
     } catch (error) {
         throw new apiError(401, error?.message || "Unautherized request")
@@ -257,9 +257,11 @@ const updateUserProfileImage = asyncHandler(async (req, res) => {
         $set: {
             profileImage: profileImg.url
         }
-    }, {
-        new: ture
-    }).select("-password")
+    }, 
+    {
+        new:true
+    }
+).select("-password")
     return res.status(200).json(
         new apiError(200, user, "Profile updated Successfully")
     )
@@ -300,7 +302,7 @@ const updateCoverImage = asyncHandler(async (req, res) => {
 //get user profile
 
 const getUserProfile = asyncHandler(async (req, res) => {
-    const { userName } = req.params
+    const { username : userName } = req.params
     if (!userName?.trim()) {
         throw new apiError(400, 'Username is required')
     }

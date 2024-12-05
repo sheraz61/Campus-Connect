@@ -34,7 +34,7 @@ router.route('/refresh-token').post(refreshAccessToken)
 router.route('/change-password').post(verifyJWT,changePassword)
 router.route('/current-user').get(verifyJWT,getCurrentUser)
 router.route('/update-details').patch(verifyJWT,updateAccountDetails)
-router.route('/profile-image').patch(verifyJWT,upload.single("avatar"),updateUserProfileImage)
+router.route('/profile-image').patch(verifyJWT,upload.single("profileImage"),updateUserProfileImage)
 router.route('/cover-image').patch(verifyJWT,upload.single("coverImage"),updateCoverImage)
 router.route('/c/:username').get(verifyJWT,getUserProfile)
 export default router
