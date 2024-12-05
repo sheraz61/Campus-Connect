@@ -19,5 +19,12 @@ app.use(express.urlencoded({
     limit: "16kb" // Limit URL-encoded payload size to 16kb
 }))
 
-
+// Serve static files from the 'public' directory
+app.use(express.static("Public"))
+// Parse cookies in incoming requests
+app.use(cookieParser())
+//routes
+import userRouter from './Routes/user.routes.js'
+//routes decaleration
+app.use('/api/v1/users',userRouter)
 export {app}
