@@ -54,10 +54,7 @@ userSchema.pre('save', async function (next) {
 })
 //password Check
 userSchema.methods.isPasswordCorrect = async function (password) {
-    console.log("Password send by User", password);
-    console.log("Password of User", this.password);
     const ismatch = await bcrypt.compare(password, this.password)
-    console.log(ismatch);
     return ismatch
 }
 //Access token

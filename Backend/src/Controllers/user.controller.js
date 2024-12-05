@@ -10,11 +10,11 @@ import jwt from 'jsonwebtoken'
 const generateAccessAndRefreshToken = async (userId) => {
     try {
         const user = await User.findById(userId)
-        const access = user.generateAccessToken()
-        const refresh = user.generateRefreshToken()
-        user.refreshToken = refresh
+        const accessToken = user.generateAccessToken()
+        const refreshToken = user.generateRefreshToken()
+        user.refreshToken = refreshToken
         await user.save({ validateBeforeSave: false })
-        return { access, refresh }
+        return { accessToken, refreshToken }
     } catch (error) {
         throw new apiError(500, "something went wrong while generating refresh and access token")
     }
@@ -81,7 +81,7 @@ const registerUser = asyncHandler(async (req, res) => {
 //loginUser
 
 const loginUser = asyncHandler(async (req, res) => {
-    console.log(req.body);
+   
 
     const { email, userName, password } = req.body;
 
