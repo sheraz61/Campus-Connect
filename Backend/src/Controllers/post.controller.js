@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 import { Post } from "../Models/posts.models.js";
 import { User } from "../Models/users.models.js"
 import { apiError } from "../Utils/apiError.js"
-import { asyncHandler } from "../Utils/asyncHanlder.js"
+import asyncHandler from "../Utils/asyncHandler.js"
 import { apiResponse } from "../Utils/apiResponse.js"
 import {
     uploadOnCloudinary,
@@ -14,8 +14,8 @@ const getAllPosts = asyncHandler(async (req, res) => {
     const {
         page = 1,
         limit = 10,
-        query = " ",
-        sortBy,
+        query = "",
+        sortBy = "createdAt",
         sortType,
         userId,
     } = req.query;
@@ -79,7 +79,7 @@ const pulishedPost = asyncHandler(async (req, res) => {
     if (!title || !discription) {
         throw new apiError(404, "All fields are required")
     }
-    const postLocalFilePath = req.file?.postImage[0]?.path;
+    const postLocalFilePath = req.file.path;
     if (!postLocalFilePath) {
         throw new apiError(404, "Post Image not found")
     }
@@ -103,6 +103,8 @@ const pulishedPost = asyncHandler(async (req, res) => {
 //get post 
 const getPostById = asyncHandler(async (req, res) => {
     const { postId } = req.params;
+    console.log(postId);
+
     if (!isValidObjectId(postId)) {
         throw new apiError(404, "Invalid post ID")
     }
@@ -133,16 +135,39 @@ const updatePost = asyncHandler(async (req, res) => {
     if (!post) {
         throw new apiError(404, "Post not found")
     }
-    if (post.owner !== req.user._id) {
-        throw new apiError(401, "Unauthorized request")
+    if (post.owner.toString() !== req.user._id.toString()) {
+        throw new apiError(401, "Unauthorized request");
     }
-    const deletePostImage = await deleteInCloudinary(vedio.postImage);
-    if (deletePostImage !== "ok") {
-        throw new apiError("Error while deleting old post image")
-    }
-    const newPostImg = await uploadOnCloudinary(newPostImgLocalPath);
-    if (!newPostImg.url) {
-        throw new apiError("Error while uploading new post image")
+
+    let newPostImg;
+    let oldImageDeleted = false;
+
+    try {
+        // Check if post has an existing image before attempting to delete
+        if (post.postImage) {
+            const deletePostImage = await deleteInCloudinary(post.postImage);
+
+            // Verify deletion was successful
+            if (deletePostImage !== "ok") {
+                throw new apiError(500, "Failed to delete existing post image");
+            }
+            oldImageDeleted = true;
+        }
+
+        // Upload the new post image
+        newPostImg = await uploadOnCloudinary(newPostImgLocalPath);
+        if (!newPostImg.url) {
+            // If upload fails and old image was deleted, we need to handle this
+            throw new apiError(500, "Error while uploading new post image");
+        }
+    } catch (error) {
+        // If image deletion failed, throw the specific error
+        if (!oldImageDeleted) {
+            throw new apiError(500, `Image deletion failed: ${error.message}`);
+        }
+
+        // If new image upload failed after deleting old image
+        throw new apiError(500, error.message);
     }
     const updatePost = await Post.findByIdAndUpdate(
         postId,
@@ -172,12 +197,12 @@ const deletePost = asyncHandler(async (req, res) => {
     if (!post) {
         throw new apiError("post not found");
     }
-    if (post.owner !== req.user._id) {
-        throw new apiError("Unauthorized request");
+    if (post.owner.toString() !== req.user._id.toString()) {
+        throw new apiError(401, "Unauthorized request");
     }
     const cloudinaryDeletePostResponse = await deleteInCloudinary(post.postImage);
     if (cloudinaryDeletePostResponse !== "ok") {
-        throw new apiError("Error while deleting post")
+        throw new apiError("Error while deleting cloudinary image")
     }
     const deletedPost = await Post.findByIdAndDelete(postId);
     if (!deletedPost) {

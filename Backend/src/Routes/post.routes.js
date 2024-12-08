@@ -23,3 +23,5 @@ router
     .get(getPostById)
     .delete(deletePost)
     .patch(upload.single("postImage"), updatePost);
+
+    export default router

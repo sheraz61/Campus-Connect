@@ -25,6 +25,8 @@ app.use(express.static("Public"))
 app.use(cookieParser())
 //routes
 import userRouter from './Routes/user.routes.js'
+import postRouter from './Routes/post.routes.js'
 //routes decaleration
 app.use('/api/v1/users',userRouter)
+app.use('/api/v1/posts',postRouter)
 export {app}
