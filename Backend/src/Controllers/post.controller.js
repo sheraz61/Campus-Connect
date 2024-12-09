@@ -79,7 +79,7 @@ const pulishedPost = asyncHandler(async (req, res) => {
     if (!title || !discription) {
         throw new apiError(404, "All fields are required")
     }
-    const postLocalFilePath = req.file.path;
+    const postLocalFilePath = req.file?.path;
     if (!postLocalFilePath) {
         throw new apiError(404, "Post Image not found")
     }
