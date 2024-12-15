@@ -47,7 +47,7 @@ function Login() {
                 <div className='max-w-[550px] border-2 border-black rounded-xl flex flex-col items-center justify-center p-5 gap-5'>
                     <h1>Login</h1>
                     <form
-onSubmit={handleSubmit}
+                        onSubmit={handleSubmit}
                         className="flex items-start justify-center flex-col gap-5 w-full"
                     >
                         <div className="flex items-center justify-between w-full">
