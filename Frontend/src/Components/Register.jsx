@@ -1,7 +1,9 @@
 import React, { useState, useRef } from 'react';
 import Button from './Button';
+import { useNavigate } from 'react-router-dom';
 
 function Register() {
+    const navigate = useNavigate()
     const [formData, setFormData] = useState({
         userName: '',
         fullName: '',
@@ -43,7 +45,9 @@ function Register() {
                 console.error('Error:', errorData.message);
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
-
+            if (response.ok) {
+                navigate('/login')
+            }
             // Clear form after successful submission
             setFormData({
                 userName: '',
@@ -65,7 +69,7 @@ function Register() {
     };
 
     return (
-        <div className="w-screen h-screen border-2 border-black flex items-center justify-center">
+        <div className="w-screen h-screen  flex items-center justify-center">
             <div className="max-w-[550px] border-2 border-black rounded-xl flex flex-col items-center justify-center p-5 gap-5">
                 <h1 className="text-3xl">Register</h1>
                 <form
@@ -93,7 +97,7 @@ function Register() {
                         <input
                             type="text"
                             name="fullName"
-                             placeholder='Enter full name'
+                            placeholder='Enter full name'
                             value={formData.fullName}
                             onChange={onInputChange}
                             required
@@ -107,7 +111,7 @@ function Register() {
                         <input
                             type="email"
                             name="email"
-                             placeholder='Enter email address'
+                            placeholder='Enter email address'
                             value={formData.email}
                             onChange={onInputChange}
                             required
@@ -121,7 +125,7 @@ function Register() {
                         <input
                             type="password"
                             name="password"
-                             placeholder='Enter password'
+                            placeholder='Enter password'
                             value={formData.password}
                             onChange={onInputChange}
                             required
@@ -137,7 +141,7 @@ function Register() {
                             name="profileImage"
                             ref={profileImageRef}
                             onChange={onInputChange}
-                            
+
                             required
                             className="px-4 py-1 border rounded-md border-black flex-1 ml-4"
                         />

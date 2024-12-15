@@ -43,7 +43,7 @@ function Login() {
     }
     return (
         <>
-            <div className='w-screen h-screen border-2 border-black flex items-center justify-center '>
+            <div className='w-screen h-screen  flex items-center justify-center '>
                 <div className='max-w-[550px] border-2 border-black rounded-xl flex flex-col items-center justify-center p-5 gap-5'>
                     <h1>Login</h1>
                     <form
