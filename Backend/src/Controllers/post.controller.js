@@ -48,7 +48,7 @@ const getAllPosts = asyncHandler(async (req, res) => {
             $project: {
                 postImage: 1,
                 title: 1,
-                description: 1,
+                discription: 1,
                 createdBy: {
                     fullName: 1,
                     userName: 1,
@@ -103,8 +103,6 @@ const pulishedPost = asyncHandler(async (req, res) => {
 //get post 
 const getPostById = asyncHandler(async (req, res) => {
     const { postId } = req.params;
-    console.log(postId);
-
     if (!isValidObjectId(postId)) {
         throw new apiError(404, "Invalid post ID")
     }
