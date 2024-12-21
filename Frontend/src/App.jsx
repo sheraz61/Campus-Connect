@@ -7,6 +7,8 @@ import Register from './Components/Register'
 import Update from './Components/Update'
 import {LoginProvider, useLogin} from './Context/Context'
 import { useState } from 'react'
+import Proflie from './Components/Proflie'
+
 const router = createBrowserRouter(
     createRoutesFromElements(
         <Route path='/' element={<Root />}>
@@ -14,6 +16,8 @@ const router = createBrowserRouter(
             <Route path='/login' element={<Login />} />
             <Route path='/register' element={<Register />} />
             <Route path='/update' element={<Update />} />
+            <Route path='/profile' element={<Proflie />} />
+           
         </Route>
     )
 )

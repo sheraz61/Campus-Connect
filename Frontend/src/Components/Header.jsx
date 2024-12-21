@@ -1,25 +1,25 @@
 import React from 'react'
 import { Link, NavLink } from 'react-router-dom'
-import logo from '../../public/connect.png'
+import logo from '../assets/connect.png'
 import { useLogin } from '../Context/Context';
 import { useNavigate } from 'react-router-dom';
 export default function Header() {
-    const { isLoggedIn ,setIsLoggedIn } = useLogin();
+    const { isLoggedIn, setIsLoggedIn } = useLogin();
 
-const navigate=useNavigate()
+    const navigate = useNavigate()
     const handleLogout = async () => {
-      
-    
+
+
         try {
             const response = await fetch('http://localhost:8000/api/v1/users/logout', {
                 method: 'POST',
                 credentials: 'include', // Important for sending cookies
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('access')}`, // Alternative to sending token in body
-                    'X-Refresh-Token' :`${localStorage.getItem('refresh')}`
+                    'X-Refresh-Token': `${localStorage.getItem('refresh')}`
                 }
             });
-    
+            const data = await response.json();
             if (response.ok) {
                 // Clear local storage
                 localStorage.removeItem('access');
@@ -28,8 +28,8 @@ const navigate=useNavigate()
                 setIsLoggedIn(false);
                 // Navigate to login page
                 navigate('/');
-                console.log('log out successfully');
-                
+                alert(data.message);
+
             } else {
                 // Handle logout error
                 const errorData = await response.json();
@@ -60,7 +60,7 @@ const navigate=useNavigate()
                     {isLoggedIn ? (
                         <div className='flex items-center lg:order-2'>
                             <Link
-                                to="#"
+                                to="profile"
                                 className="text-gray-800 hover:bg-gray-50 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2 focus:outline-none"
                             >
                                 Profile

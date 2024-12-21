@@ -1,6 +1,6 @@
 import React from 'react'
 import Button from '../Components/Button'
-import HomeImg from '../../public/homeImg.jpeg'
+import homeImg from '../assets/homeImg.jpeg'
 function Home() {
   return (
     <div className='flex items-center justify-around h-screen'>
@@ -13,7 +13,7 @@ function Home() {
         </div>
       </div>
       <div className=' mt-8'>
-        <img src={HomeImg} alt="home-img" width={500} />
+        <img src={homeImg} alt="home-img" width={500} />
       </div>
     </div>
   )
