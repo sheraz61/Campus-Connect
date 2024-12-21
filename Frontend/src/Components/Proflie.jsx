@@ -5,7 +5,9 @@ import ChangePassword from './ChangePassword';
 import UpdateDetail from './UpdateDetail';
 import ProfileChange from './ProfileChange';
 import ChangeCover from './ChangeCover';
+import { useNavigate } from 'react-router-dom';
 function Profile() {
+    const navigate = useNavigate()
     const [userdata, setUserData] = useState({})
     const [stats, setStats] = useState({})
     const [updateTrigger, setUpdateTrigger] = useState(0)
@@ -111,7 +113,7 @@ function Profile() {
                     <div className='flex flex-wrap gap-4 mt-6'>
                         <button
                             className='px-6 py-2 bg-orange-700 text-white rounded-full hover:bg-orange-800 transition-colors'
-
+                            onClick={() => navigate('/my-posts')}
                         >
                             MY Post
                         </button>

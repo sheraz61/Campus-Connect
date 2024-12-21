@@ -3,7 +3,7 @@ import Button from './Button'
 import { useLogin } from '../Context/Context'
 import { useNavigate } from 'react-router-dom';
 function Login() {
-    const {  setIsLoggedIn } = useLogin();
+    const { setIsLoggedIn, setUser } = useLogin();
     const navigate = useNavigate();
     const [userLogin, setUserLogin] = useState({
         userName: '',
@@ -18,7 +18,7 @@ function Login() {
                 [name]: value,
             }
         ))
-       
+
     }
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -29,8 +29,8 @@ function Login() {
             },
             body: JSON.stringify(userLogin),
         })
-       
-        
+
+
         const data = await response.json();
         if (!response.ok) {
             throw new Error('Failed to login')
@@ -39,6 +39,11 @@ function Login() {
             localStorage.setItem('access', data.data.accessToken)
             localStorage.setItem('refresh', data.data.refreshToken)
             setIsLoggedIn(true);
+            setUser({
+                id: data.data.user._id,
+                userName: data.data.user.userName,
+                email: data.data.user.email,
+            })
             navigate('/update')
             setUserLogin({
                 userName: '',
@@ -47,6 +52,8 @@ function Login() {
             })
             alert(data.message);
         }
+
+
     }
     return (
         <>

@@ -2,7 +2,9 @@ import {createContext ,useContext} from 'react'
 
 export const LoginContext=createContext({
     isLoggedIn:false,
-    setIsLoggedIn:()=>{}
+    user:null,
+    setIsLoggedIn:()=>{},
+    setUser:()=>{}
 })
 
 export const useLogin=()=>{

@@ -93,7 +93,7 @@ const getChannelPosts = asyncHandler(async (req, res) => {
       {
         $project: {
           title: 1,
-          description: 1,
+          discription: 1,
           postImage: 1,
           owner: 1,
           createdAt: 1,

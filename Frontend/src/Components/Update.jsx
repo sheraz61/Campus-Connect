@@ -50,6 +50,7 @@ function Update() {
               postImg={post.postImage}
               discription={post.discription}
               owner={post.createdBy}
+              _id={post._id}
             />
           ))
         ) : (
