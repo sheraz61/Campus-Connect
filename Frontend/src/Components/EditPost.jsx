@@ -67,7 +67,7 @@ function EditPost() {
 
       if (response.ok) {
         alert('Post updated successfully');
-        navigate(`/posts/${id}`);
+        navigate(-1);
       } else {
         const errorData = await response.json();
         alert(`Failed to update post: ${errorData.message || 'Unknown error'}`);

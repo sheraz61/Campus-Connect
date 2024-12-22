@@ -11,6 +11,9 @@ import Proflie from './Components/Proflie'
 import MyPosts from './Components/MyPosts'
 import PostDetails from './Components/PostDetails'
 import EditPost from './Components/EditPost'
+import Resource from './Components/Resource'
+import ResourceDetails from './Components/ResourceDetails'
+import EditRes from './Components/EditRes'
 
 const router = createBrowserRouter(
     createRoutesFromElements(
@@ -19,10 +22,13 @@ const router = createBrowserRouter(
             <Route path='/login' element={<Login />} />
             <Route path='/register' element={<Register />} />
             <Route path='/update' element={<Update />} />
+            <Route path='/resource' element={<Resource />} />
             <Route path='/profile' element={<Proflie />} />
             <Route path='/my-posts' element={<MyPosts />} />
             <Route path='/posts/:id' element={<PostDetails />} />
+            <Route path='/papers/:id' element={<ResourceDetails />} />
             <Route path='/edit-post/:id' element={<EditPost />} />
+            <Route path='/edit-res/:id' element={<EditRes />} />
            
         </Route>
     )

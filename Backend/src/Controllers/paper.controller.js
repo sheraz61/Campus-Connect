@@ -112,65 +112,74 @@ const getPaperById= asyncHandler(async(req,res)=>{
     )
 })
 //update paper 
-const updatePaper= asyncHandler(async(req,res)=>{
-    const {paperId}= req.params;
-    const {title,discription,semester} = req.body;
-    const paperLocalPath= req.file?.path;
-    if(!isValidObjectId(paperId)){
-        throw new apiError(404, 'Invalid paper ID')
-    }
-    if(!title || !discription){
-        throw new apiError(400, 'Title and discription are required')
-    }
-    if(!paperLocalPath){
-        throw new apiError(400, 'Paper file is required')
-    }
-    const paper= await Paper.findById(paperId);
-    if(!paper){
-        throw new apiError(404, 'Paper not found')
-    }
-    if(paper.owner.toString()!==req.user._id.toString()){
-        throw new apiError(401, 'Unauthorized request')
-    }
-    let newPaperFile;
-    let oldPaperDeleted=false;
-    try{
-        if(paper.paperImage){
-            const deletePaperImage= await deleteInCloudinary(paper.paperImage);
-            if(deletePaperImage!=="ok"){
-                throw new apiError(500, 'Failed to delete old paper image')
-            }
-            oldPaperDeleted=true;
+const updatePaper = asyncHandler(async (req, res) => {
+  const { paperId } = req.params;
+  const { title, discription, semester } = req.body;
+
+  // Check for valid ObjectId
+  if (!isValidObjectId(paperId)) {
+    throw new apiError(404, 'Invalid paper ID');
+  }
+
+  // Ensure required fields are provided
+  if (!title || !discription) {
+    throw new apiError(400, 'Title and description are required');
+  }
+
+  // Find the paper in the database
+  const paper = await Paper.findById(paperId);
+  if (!paper) {
+    throw new apiError(404, 'Paper not found');
+  }
+
+  // Check if the logged-in user is the owner of the paper
+  if (paper.owner.toString() !== req.user._id.toString()) {
+    throw new apiError(401, 'Unauthorized request');
+  }
+
+  let newPaperFile;
+  if (req.file?.path) {
+    // If a new file is provided, handle the upload and deletion of the old file
+    try {
+      if (paper.paperImage) {
+        const deletePaperImage = await deleteInCloudinary(paper.paperImage);
+        if (deletePaperImage !== "ok") {
+          throw new apiError(500, 'Failed to delete old paper image');
         }
-        newPaperFile = await uploadOnCloudinary(paperLocalPath)
-        if(!newPaperFile.url){
-            throw new apiError(500, 'Failed to upload new paper')
-        }
-    }catch(err){
-        if(!oldPaperDeleted){
-            throw new apiError(500, `Image deletion failed: ${err.message}`)
-        }
-        throw new apiError(500, err.message)
+      }
+
+      newPaperFile = await uploadOnCloudinary(req.file.path);
+      if (!newPaperFile.url) {
+        throw new apiError(500, 'Failed to upload new paper');
+      }
+    } catch (err) {
+      throw new apiError(500, `Image update failed: ${err.message}`);
     }
-    const updatePaper= await Paper.findByIdAndUpdate(
-        paperId,{
-            $set:{
-                title,
-                discription,
-                semester,
-                paperImage: newPaperFile.url
-            }
-        },{
-            new:true
-        }
-    )
-    if(!updatePaper){
-        throw new apiError(500, 'Failed to update paper')
-    }
-    return res.status(200).json(
-        new apiResponse(200, updatePaper, 'Paper updated successfully')
-    )
-})
+  }
+
+  // Update the paper in the database
+  const updatedPaper = await Paper.findByIdAndUpdate(
+    paperId,
+    {
+      $set: {
+        title,
+        discription,
+        semester,
+        paperImage: newPaperFile?.url || paper.paperImage, // Use the new image URL if provided, otherwise keep the old one
+      },
+    },
+    { new: true }
+  );
+
+  if (!updatedPaper) {
+    throw new apiError(500, 'Failed to update paper');
+  }
+
+  return res.status(200).json(
+    new apiResponse(200, updatedPaper, 'Paper updated successfully')
+  );
+});
+
 
 // delete Paper
 

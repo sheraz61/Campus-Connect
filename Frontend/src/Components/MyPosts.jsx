@@ -15,6 +15,7 @@ function MyPosts() {
     }, [])
     return (
         <div className='flex flex-wrap '>
+            
             {isLoggedIn ? (
                 postData.length > 0 ? (
                     postData.map((post, index) => (

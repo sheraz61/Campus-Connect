@@ -2,7 +2,7 @@ import React from 'react'
 import { useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
-function CreatePost({ updateTrigger, setUpdateTrigger }) {
+function CreatePost({ updateTrigger, setUpdateTrigger,setIsCreatePost,isCreatePost }) {
     const [newPost, setNewPost] = useState({
         title: '',
         discription: '',
@@ -43,6 +43,7 @@ function CreatePost({ updateTrigger, setUpdateTrigger }) {
             if (response.ok) {
                 navigate('/profile')
                 setUpdateTrigger(updateTrigger + 1)
+                setIsCreatePost(!isCreatePost)
                 setNewPost({
                     title: '',
                     discription: '',
