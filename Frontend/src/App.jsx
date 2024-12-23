@@ -14,6 +14,7 @@ import EditPost from './Components/EditPost'
 import Resource from './Components/Resource'
 import ResourceDetails from './Components/ResourceDetails'
 import EditRes from './Components/EditRes'
+import GPA from './Components/GPA'
 
 const router = createBrowserRouter(
     createRoutesFromElements(
@@ -22,6 +23,7 @@ const router = createBrowserRouter(
             <Route path='/login' element={<Login />} />
             <Route path='/register' element={<Register />} />
             <Route path='/update' element={<Update />} />
+            <Route path='/gpa' element={<GPA />} />
             <Route path='/resource' element={<Resource />} />
             <Route path='/profile' element={<Proflie />} />
             <Route path='/my-posts' element={<MyPosts />} />
