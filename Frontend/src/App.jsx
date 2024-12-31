@@ -4,17 +4,17 @@ import Root from './Root'
 import Home from './Components/Home'
 import Login from './Components/Login'
 import Register from './Components/Register'
-import Update from './Components/Update'
-import {LoginProvider, useLogin} from './Context/Context'
-import { useState } from 'react'
-import Proflie from './Components/Proflie'
-import MyPosts from './Components/MyPosts'
-import PostDetails from './Components/PostDetails'
-import EditPost from './Components/EditPost'
-import Resource from './Components/Resource'
-import ResourceDetails from './Components/ResourceDetails'
-import EditRes from './Components/EditRes'
+import Update from './Components/Update/Update'
+import {LoginProvider, refreshToken} from './Context/Context'
+import { useState ,useEffect} from 'react'
+import Proflie from './Components/Profile/Proflie'
+import Resource from './Components/Resource/Resource'
+import ResourceDetails from './Components/Resource/ResourceDetails'
 import GPA from './Components/GPA'
+import EditUpdate from './Components/Update/EditUpdate'
+import EditResource from './Components/Resource/EditResource'
+import UpdateDetails from './Components/Update/UpdateDetails'
+import MyUpdates from './Components/Update/MyUpdates'
 
 const router = createBrowserRouter(
     createRoutesFromElements(
@@ -26,11 +26,11 @@ const router = createBrowserRouter(
             <Route path='/gpa' element={<GPA />} />
             <Route path='/resource' element={<Resource />} />
             <Route path='/profile' element={<Proflie />} />
-            <Route path='/my-posts' element={<MyPosts />} />
-            <Route path='/posts/:id' element={<PostDetails />} />
+            <Route path='/my-posts' element={<MyUpdates />} />
+            <Route path='/posts/:id' element={<UpdateDetails />} />
             <Route path='/papers/:id' element={<ResourceDetails />} />
-            <Route path='/edit-post/:id' element={<EditPost />} />
-            <Route path='/edit-res/:id' element={<EditRes />} />
+            <Route path='/edit-post/:id' element={<EditUpdate />} />
+            <Route path='/edit-res/:id' element={<EditResource />} />
            
         </Route>
     )
@@ -38,6 +38,27 @@ const router = createBrowserRouter(
 function App() {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [user,setUser]=useState({})
+    //handle refresh to update session
+    useEffect(() => {
+        const checkAuth = async () => {
+            const tokenData = await refreshToken();
+            if (tokenData) {
+                setIsLoggedIn(true);
+                setUser({
+                    id: tokenData.data.user._id,
+                    userName: tokenData.data.user.userName,
+                    email: tokenData.data.user.email,
+                });
+              
+                
+            } else {
+                setIsLoggedIn(false);
+                setUser({});
+            }
+        };
+
+        checkAuth();
+    }, []);
     return (
         <LoginProvider value={{isLoggedIn,setIsLoggedIn,user,setUser}}>
             <RouterProvider router={router} />

@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { useLogin } from '../Context/Context';
+import { useLogin } from '../../Context/Context';
 import { ArrowLeft } from 'lucide-react';
 
-function EditPost() {
+function EditUpdate() {
   const { id } = useParams();
   const navigate = useNavigate();
   const { user } = useLogin();
@@ -164,4 +164,4 @@ function EditPost() {
   );
 }
 
-export default EditPost;
+export default EditUpdate;

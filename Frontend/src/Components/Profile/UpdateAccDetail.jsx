@@ -1,7 +1,7 @@
 import React from 'react'
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-function UpdateDetail({ setIsUpdateDetails, isUpdateDetails, updateTrigger, setUpdateTrigger }) {
+function UpdateAccDetail({ setIsUpdateDetails, isUpdateDetails, updateTrigger, setUpdateTrigger }) {
     const navigate = useNavigate()
     const [accountDetails, setAccountDetails] = useState({
         fullName: '',
@@ -81,4 +81,4 @@ function UpdateDetail({ setIsUpdateDetails, isUpdateDetails, updateTrigger, setU
     )
 }
 
-export default UpdateDetail
+export default UpdateAccDetail

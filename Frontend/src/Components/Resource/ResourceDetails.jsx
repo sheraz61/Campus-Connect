@@ -2,7 +2,7 @@ import React from 'react'
 import { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom';
 import { Pencil, Trash2, ArrowLeft, Download } from 'lucide-react';
-import { useLogin } from '../Context/Context.js'
+import { useLogin } from '../../Context/Context.js'
 function ResourceDetails() {
 
     const [paper, setPaper] = useState({});

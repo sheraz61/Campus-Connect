@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { useLogin } from '../Context/Context';
+import { useLogin } from '../../Context/Context';
 import { ArrowLeft } from 'lucide-react';
-function EditRes() {
+function EditResource() {
      const { id } = useParams();
       const navigate = useNavigate();
       const { user } = useLogin();
@@ -186,4 +186,4 @@ function EditRes() {
   )
 }
 
-export default EditRes
+export default EditResource

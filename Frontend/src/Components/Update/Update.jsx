@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
-import Post from './Post'
-import { useLogin } from '../Context/Context'
+import { useLogin } from '../../Context/Context'
+import UpdateItem from './UpdateItem';
 
 const getPost = async () => {
   try {
@@ -29,7 +29,7 @@ const getPost = async () => {
 
 function Update() {
   const { isLoggedIn } = useLogin()
-  const [posts, setPosts] = useState([]); 
+  const [posts, setPosts] = useState([]);
 
   useEffect(() => {
     getPost().then((data) => {
@@ -44,7 +44,7 @@ function Update() {
       {isLoggedIn ? (
         posts.length > 0 ? (
           posts.map((post, index) => (
-            <Post 
+            <UpdateItem
               key={post._id || post.id || index} // Try multiple possible unique identifiers
               title={post.title}
               postImg={post.postImage}

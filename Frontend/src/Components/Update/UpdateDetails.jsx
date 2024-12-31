@@ -2,8 +2,8 @@ import React from 'react'
 import { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom';
 import { Pencil, Trash2, ArrowLeft } from 'lucide-react';
-import { useLogin } from '../Context/Context.js'
-function PostDetails() {
+import { useLogin } from '../../Context/Context.js'
+function UpdateDetails() {
     const [post, setPost] = useState({});
     const { id } = useParams();
     const navigate = useNavigate();
@@ -45,7 +45,7 @@ function PostDetails() {
             }
         }
     };
-    if (!post) return <div className="p-8">Loading...</div>;
+    if (!post) return <div className="p-8">Login First then Resource visible</div>;
     const isOwner = user?.id === post.owner // Compare logged-in user's ID with the post owner's ID
     return (
         <div className="max-w-4xl mx-auto p-6">
@@ -105,4 +105,4 @@ function PostDetails() {
     )
 }
 
-export default PostDetails
+export default UpdateDetails

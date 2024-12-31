@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
-function CreatePaper({isCreatePost,setIsCreatePost,setUpdateTrigger,updateTrigger}) {
+function CreateResource({isCreatePost,setIsCreatePost,setUpdateTrigger,updateTrigger}) {
     const paperImgRef=useRef(null)
     const navigate = useNavigate()
     const [paper,setPaper]=useState({
@@ -122,4 +122,4 @@ function CreatePaper({isCreatePost,setIsCreatePost,setUpdateTrigger,updateTrigge
   )
 }
 
-export default CreatePaper
+export default CreateResource

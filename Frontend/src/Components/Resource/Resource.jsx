@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import { useLogin } from '../Context/Context'
-import Paper from './Paper'
+import { useLogin } from '../../Context/Context'
+import ResourceItem from './ResourceItem'
 
 function Resource() {
     const [paper, setPaper] = useState([]) // Initialize as empty array
@@ -45,15 +45,12 @@ function Resource() {
     if (error) {
         return <div className="text-red-500 text-center p-4">{error}</div>
     }
-
-console.log(paper);
-
     return (
         <div className='flex flex-wrap gap-4 p-4'>
             {isLoggedIn ? (
                 paper.length > 0 ? (
                     paper.map((res) => (
-                        <Paper
+                        <ResourceItem
                         key={res._id}
                         title={res.title}
                         paperImg={res.paperImage}

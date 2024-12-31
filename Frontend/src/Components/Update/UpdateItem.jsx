@@ -1,7 +1,7 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
 
-function Post({ title, discription, postImg, owner, _id }) {
+function UpdateItem({ title, discription, postImg, owner, _id }) {
     const navigate = useNavigate()
 
     return (
@@ -46,4 +46,4 @@ function Post({ title, discription, postImg, owner, _id }) {
     )
 }
 
-export default Post;
+export default UpdateItem;

@@ -114,7 +114,7 @@ const getPostById = asyncHandler(async (req, res) => {
         new apiResponse(200, post, "Post fetched successfully")
     )
 });
-
+//update
 const updatePost = asyncHandler(async (req, res) => {
     const { postId } = req.params;
     const { title, discription } = req.body;

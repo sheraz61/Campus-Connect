@@ -2,7 +2,7 @@ import React from 'react'
 import { useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
-function CreatePost({ updateTrigger, setUpdateTrigger,setIsCreatePost,isCreatePost }) {
+function CreateUpdate({ updateTrigger, setUpdateTrigger,setIsCreatePost,isCreatePost }) {
     const [newPost, setNewPost] = useState({
         title: '',
         discription: '',
@@ -41,7 +41,7 @@ function CreatePost({ updateTrigger, setUpdateTrigger,setIsCreatePost,isCreatePo
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
             if (response.ok) {
-                navigate('/profile')
+                navigate('/update')
                 setUpdateTrigger(updateTrigger + 1)
                 setIsCreatePost(!isCreatePost)
                 setNewPost({
@@ -109,4 +109,4 @@ function CreatePost({ updateTrigger, setUpdateTrigger,setIsCreatePost,isCreatePo
     )
 }
 
-export default CreatePost
+export default CreateUpdate

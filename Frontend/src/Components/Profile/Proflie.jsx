@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { PencilSquareIcon, CameraIcon } from '@heroicons/react/24/solid';
-import CreatePost from './CreatePost';
 import ChangePassword from './ChangePassword';
-import UpdateDetail from './UpdateDetail';
 import ProfileChange from './ProfileChange';
 import ChangeCover from './ChangeCover';
 import { useNavigate } from 'react-router-dom';
-import CreatePaper from './CreatePaper';
+import UpdateAccDetail from './UpdateAccDetail';
+import CreateUpdate from '../Update/CreateUpdate';
+import CreateResource from '../Resource/CreateResource';
 
 function Profile() {
     const navigate = useNavigate();
@@ -123,7 +123,7 @@ function Profile() {
                             className="px-6 py-2 bg-orange-700 text-white rounded-full hover:bg-orange-800 transition-colors"
                             onClick={() => navigate('/my-posts')}
                         >
-                            MY Posts
+                            MY Updates
                         </button>
                         <button
                             className="px-6 py-2 bg-orange-700 text-white rounded-full hover:bg-orange-800 transition-colors"
@@ -136,7 +136,7 @@ function Profile() {
                                 setIsCreateResource(false);
                             }}
                         >
-                            Create Post
+                            Create Update
                         </button>
                         <button
                             className="px-6 py-2 bg-orange-700 text-white rounded-full hover:bg-orange-800 transition-colors"
@@ -182,10 +182,10 @@ function Profile() {
                     {/* Forms Section */}
                     <div className="mt-8 w-full">
                         <div className="bg-gray-100 p-6 rounded-lg shadow-md">
-                            {isCreatePost && <CreatePost isCreatePost={isCreatePost} setIsCreatePost={setIsCreatePost} setUpdateTrigger={setUpdateTrigger} updateTrigger={updateTrigger} />}
-                            {isCreateResource && <CreatePaper isCreateResource={isCreateResource} setIsCreateResource={setIsCreateResource} />}
+                            {isCreatePost && <CreateUpdate isCreatePost={isCreatePost} setIsCreatePost={setIsCreatePost} setUpdateTrigger={setUpdateTrigger} updateTrigger={updateTrigger} />}
+                            {isCreateResource && <CreateResource isCreateResource={isCreateResource} setIsCreateResource={setIsCreateResource} />}
                             {isForgetPassword && <ChangePassword setUpdateTrigger={setUpdateTrigger} updateTrigger={updateTrigger} />}
-                            {isUpdateDetails && <UpdateDetail isUpdateDetails={isUpdateDetails} setIsUpdateDetails={setIsUpdateDetails} setUpdateTrigger={setUpdateTrigger} updateTrigger={updateTrigger} />}
+                            {isUpdateDetails && <UpdateAccDetail isUpdateDetails={isUpdateDetails} setIsUpdateDetails={setIsUpdateDetails} setUpdateTrigger={setUpdateTrigger} updateTrigger={updateTrigger} />}
                             {isUpdateProfile && <ProfileChange setIsUpdateProfile={setIsUpdateProfile} isUpdateProfile={isUpdateProfile} setUpdateTrigger={setUpdateTrigger} updateTrigger={updateTrigger} />}
                             {isUpdateCover && <ChangeCover isUpdateCover={isUpdateCover} setIsUpdateCover={setIsUpdateCover} updateTrigger={updateTrigger} setUpdateTrigger={setUpdateTrigger} />}
                         </div>

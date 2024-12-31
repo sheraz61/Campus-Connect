@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
-import Post from './Post'
-import { useLogin } from '../Context/Context'
-function MyPosts() {
+import UpdateItem from './UpdateItem'
+import { useLogin } from '../../Context/Context'
+function MyUpdates() {
     const [postData, setPostData] = useState({})
     const { isLoggedIn } = useLogin()
     useEffect(() => {
@@ -19,7 +19,7 @@ function MyPosts() {
             {isLoggedIn ? (
                 postData.length > 0 ? (
                     postData.map((post, index) => (
-                        <Post
+                        <UpdateItem
                             key={post._id || post.id || index} // Try multiple possible unique identifiers
                             title={post.title}
                             postImg={post.postImage}
@@ -38,4 +38,4 @@ function MyPosts() {
     )
 }
 
-export default MyPosts
+export default MyUpdates

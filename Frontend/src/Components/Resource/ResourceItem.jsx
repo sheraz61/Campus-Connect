@@ -1,7 +1,7 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
 
-function Post({ title, discription, paperImg, owner, _id, semester }) {
+function ResourceItem({ title, discription, paperImg, owner, _id, semester }) {
     const navigate = useNavigate()
 
     return (
@@ -47,4 +47,4 @@ function Post({ title, discription, paperImg, owner, _id, semester }) {
     )
 }
 
-export default Post;
+export default ResourceItem;
