@@ -15,6 +15,8 @@ import EditUpdate from './Components/Update/EditUpdate'
 import EditResource from './Components/Resource/EditResource'
 import UpdateDetails from './Components/Update/UpdateDetails'
 import MyUpdates from './Components/Update/MyUpdates'
+import AdminDashboard from './Components/AdminDashboard'
+import { Toaster } from 'react-hot-toast'
 
 const router = createBrowserRouter(
     createRoutesFromElements(
@@ -31,7 +33,7 @@ const router = createBrowserRouter(
             <Route path='/papers/:id' element={<ResourceDetails />} />
             <Route path='/edit-post/:id' element={<EditUpdate />} />
             <Route path='/edit-res/:id' element={<EditResource />} />
-           
+           <Route path='admin' element={<AdminDashboard/>} />
         </Route>
     )
 )
@@ -60,10 +62,12 @@ function App() {
         checkAuth();
     }, []);
     return (
-        <LoginProvider value={{isLoggedIn,setIsLoggedIn,user,setUser}}>
-            <RouterProvider router={router} />
-        </LoginProvider>
-    
+        <>
+            <Toaster position="top-right" />
+            <LoginProvider value={{isLoggedIn,setIsLoggedIn,user,setUser}}>
+                <RouterProvider router={router} />
+            </LoginProvider>
+        </>
     )
 }
 

@@ -1,6 +1,5 @@
-
 import React, { useState } from 'react';
-import { Calculator, Plus, RotateCcw, Trash2 } from 'lucide-react';
+import { Calculator, Plus, RotateCcw, Trash2, Info } from 'lucide-react';
 
 const GPA = () => {
   const [subjects, setSubjects] = useState([
@@ -9,6 +8,7 @@ const GPA = () => {
   const [totalCreditHours, setTotalCreditHours] = useState('');
   const [result, setResult] = useState('');
   const [isCalculated, setIsCalculated] = useState(false);
+  const [showInfo, setShowInfo] = useState(false);
 
   const calGPA = (marks) => {
     const numMarks = parseInt(marks);
@@ -48,7 +48,7 @@ const GPA = () => {
 
     if (!isValid) {
       setResult('Please enter valid inputs for all fields');
-    setIsCalculated(true);
+      setIsCalculated(true);
       return;
     }
 
@@ -71,111 +71,145 @@ const GPA = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col">
-     
+    <div className="min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-4xl mx-auto">
+        <div className="bg-white rounded-xl shadow-lg overflow-hidden">
+          <div className="p-6 sm:p-8">
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-6">
+              <h2 className="text-2xl sm:text-3xl font-bold text-gray-900">
+                GPA Calculator UOS
+              </h2>
+              <button
+                onClick={() => setShowInfo(!showInfo)}
+                className="flex items-center gap-2 text-[#C84C32] hover:text-[#B33D25] transition-colors"
+              >
+                <Info className="w-5 h-5" />
+                <span className="text-sm font-medium">Grading System</span>
+              </button>
+            </div>
 
-      {/* Main Content */}
-      <main className="flex-grow container mx-auto px-4 py-8">
-        <div className="border border-gray-300 max-w-3xl mx-auto bg-white rounded-lg shadow-lg overflow-hidden">
-          <div className="p-6">
-            <h2 className="text-center font-bold text-3xl bg-gray-700  m-auto rounded-md p-3 text-white hover:cursor-pointer mt-[30px]">GPA Calculator UOS</h2>
-            <p className="text-center text-gray-600 mb-6 mt-[10px] max-w-[600px] m-auto">
-              Please enter the obtained marks and choose the credit hours for each subject to calculate
-              the GPA accurately.
+            {showInfo && (
+              <div className="mb-6 p-4 bg-gray-50 rounded-lg border border-gray-200">
+                <h3 className="font-semibold mb-2">Grading System:</h3>
+                <ul className="space-y-1 text-sm text-gray-600">
+                  <li>80-100: 4.00 GPA</li>
+                  <li>65-79: 3.00-3.99 GPA</li>
+                  <li>50-64: 2.00-2.99 GPA</li>
+                  <li>40-49: 1.00-1.99 GPA</li>
+                  <li>Below 40: 0.00 GPA</li>
+                </ul>
+              </div>
+            )}
+
+            <p className="text-gray-600 mb-6 text-center sm:text-left">
+              Enter your marks and credit hours for each subject to calculate your semester GPA.
             </p>
 
-            <div className="space-y-4 border border-gray-300 p-6 rounded-md">
-              <div className="mb-4">
-                <label className="block text-sm font-medium mb-1">
-                  Total Credit Hours:
-                </label>
-                <input
-                  type="number"
-                  min="1"
-                  max="18"
-                  value={totalCreditHours}
-                  onChange={(e) => setTotalCreditHours(e.target.value)}
-                  placeholder="Enter total credit hours"
-                  disabled={isCalculated}
-                  className="w-full max-w-xs px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
+            <div className="space-y-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Total Credit Hours
+                  </label>
+                  <input
+                    type="number"
+                    min="1"
+                    max="18"
+                    value={totalCreditHours}
+                    onChange={(e) => setTotalCreditHours(e.target.value)}
+                    placeholder="Enter total credit hours"
+                    disabled={isCalculated}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-[#C84C32] focus:border-transparent transition-colors"
+                  />
+                </div>
               </div>
 
-              {subjects.map((subject, index) => (
-                <div key={subject.id} className="flex items-center gap-4">
-                  <div className="flex-1">
-                    <label className="block text-sm font-medium mb-1">
-                      Subject {index + 1}:
-                    </label>
-                    <div className="flex gap-2">
-                      <input
-                        type="number"
-                        min="0"
-                        max="100"
-                        value={subject.marks}
-                        onChange={(e) => handleInputChange(subject.id, 'marks', e.target.value)}
-                        placeholder="Enter marks"
-                        className="flex-1 p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        disabled={isCalculated}
-                      />
-                      <select
-                        value={subject.creditHours}
-                        onChange={(e) => handleInputChange(subject.id, 'creditHours', e.target.value)}
-                        className="w-24 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        disabled={isCalculated}
-                      >
-                        <option value="2">2</option>
-                        <option value="3">3</option>
-                        <option value="4">4</option>
-                      </select>
+              <div className="space-y-4">
+                {subjects.map((subject, index) => (
+                  <div key={subject.id} className="bg-gray-50 p-4 rounded-lg">
+                    <div className="flex flex-col sm:flex-row gap-4">
+                      <div className="flex-1">
+                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                          Subject {index + 1} Marks
+                        </label>
+                        <input
+                          type="number"
+                          min="0"
+                          max="100"
+                          value={subject.marks}
+                          onChange={(e) => handleInputChange(subject.id, 'marks', e.target.value)}
+                          placeholder="Enter marks (0-100)"
+                          disabled={isCalculated}
+                          className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-[#C84C32] focus:border-transparent transition-colors"
+                        />
+                      </div>
+                      <div className="w-full sm:w-32">
+                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                          Credit Hours
+                        </label>
+                        <select
+                          value={subject.creditHours}
+                          onChange={(e) => handleInputChange(subject.id, 'creditHours', e.target.value)}
+                          disabled={isCalculated}
+                          className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-[#C84C32] focus:border-transparent transition-colors"
+                        >
+                          <option value="2">2</option>
+                          <option value="3">3</option>
+                          <option value="4">4</option>
+                        </select>
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
 
-              <div className="flex flex-wrap gap-2 justify-center mt-6">
+              <div className="flex flex-wrap gap-3 justify-center sm:justify-start">
                 <button
                   onClick={resetCalculator}
-                  className="px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-100 flex items-center gap-2"
+                  className="flex items-center gap-2 px-4 py-2 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 transition-colors"
                 >
-                  <RotateCcw className="h-4 w-4" /> Reset
+                  <RotateCcw className="w-4 h-4" />
+                  Reset
                 </button>
                 <button
                   onClick={addSubject}
                   disabled={isCalculated}
-                  className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50 flex items-center gap-2"
+                  className="flex items-center gap-2 px-4 py-2 bg-[#C84C32] text-white rounded-md hover:bg-[#B33D25] transition-colors disabled:opacity-50"
                 >
-                  <Plus className="h-4 w-4" /> Add Subject
+                  <Plus className="w-4 h-4" />
+                  Add Subject
                 </button>
                 <button
                   onClick={removeLastSubject}
                   disabled={isCalculated || subjects.length === 1}
-                  className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 disabled:opacity-50 flex items-center gap-2"
+                  className="flex items-center gap-2 px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors disabled:opacity-50"
                 >
-                  <Trash2 className="h-4 w-4" /> Delete Subject
+                  <Trash2 className="w-4 h-4" />
+                  Remove Subject
                 </button>
                 <button
                   onClick={calculateGPA}
                   disabled={isCalculated}
-                  className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 disabled:opacity-50 flex items-center gap-2"
+                  className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors disabled:opacity-50"
                 >
-                  <Calculator className="h-4 w-4" /> Calculate GPA
+                  <Calculator className="w-4 h-4" />
+                  Calculate GPA
                 </button>
               </div>
 
               {result && (
-                <div className={`text-center text-lg font-semibold p-4 rounded ${
-                  result.includes('Please') ? 'text-red-500' : 'text-green-600'
+                <div className={`mt-6 p-4 rounded-lg text-center ${
+                  result.includes('Please') 
+                    ? 'bg-red-50 text-red-600' 
+                    : 'bg-green-50 text-green-600'
                 }`}>
-                  {result}
+                  <p className="text-lg font-semibold">{result}</p>
                 </div>
               )}
             </div>
           </div>
         </div>
-      </main>
-
-    
+      </div>
     </div>
   );
 };

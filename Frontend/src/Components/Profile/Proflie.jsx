@@ -1,5 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { PencilSquareIcon, CameraIcon } from '@heroicons/react/24/solid';
+import { 
+    PencilSquareIcon, 
+    CameraIcon, 
+    XMarkIcon,
+    DocumentTextIcon,
+    BookOpenIcon,
+    KeyIcon,
+    UserCircleIcon,
+    ArrowPathIcon
+} from '@heroicons/react/24/solid';
 import ChangePassword from './ChangePassword';
 import ProfileChange from './ProfileChange';
 import ChangeCover from './ChangeCover';
@@ -13,12 +22,7 @@ function Profile() {
     const [userdata, setUserData] = useState({});
     const [stats, setStats] = useState({});
     const [updateTrigger, setUpdateTrigger] = useState(0);
-    const [isCreatePost, setIsCreatePost] = useState(false);
-    const [isCreateResource, setIsCreateResource] = useState(false);
-    const [isForgetPassword, setIsForgetPassword] = useState(false);
-    const [isUpdateDetails, setIsUpdateDetails] = useState(false);
-    const [isUpdateProfile, setIsUpdateProfile] = useState(false);
-    const [isUpdateCover, setIsUpdateCover] = useState(false);
+    const [modal, setModal] = useState({ isOpen: false, type: null });
 
     useEffect(() => {
         fetch('http://localhost:8000/api/v1/users/current-user', {
@@ -38,160 +42,182 @@ function Profile() {
         }).then(res => res.json()).then(data => setStats(data.data));
     }, [updateTrigger]);
 
+    const openModal = (type) => {
+        setModal({ isOpen: true, type });
+    };
+
+    const closeModal = () => {
+        setModal({ isOpen: false, type: null });
+    };
+
+    const renderModalContent = () => {
+        switch (modal.type) {
+            case 'createPost':
+                return <CreateUpdate setUpdateTrigger={setUpdateTrigger} updateTrigger={updateTrigger} closeModal={closeModal} />;
+            case 'createResource':
+                return <CreateResource setUpdateTrigger={setUpdateTrigger} updateTrigger={updateTrigger} closeModal={closeModal} />;
+            case 'changePassword':
+                return <ChangePassword setUpdateTrigger={setUpdateTrigger} updateTrigger={updateTrigger} closeModal={closeModal} />;
+            case 'updateDetails':
+                return <UpdateAccDetail setUpdateTrigger={setUpdateTrigger} updateTrigger={updateTrigger} closeModal={closeModal} />;
+            case 'updateProfile':
+                return <ProfileChange setUpdateTrigger={setUpdateTrigger} updateTrigger={updateTrigger} closeModal={closeModal} />;
+            case 'updateCover':
+                return <ChangeCover setUpdateTrigger={setUpdateTrigger} updateTrigger={updateTrigger} closeModal={closeModal} />;
+            default:
+                return null;
+        }
+    };
+
+    const getModalTitle = () => {
+        switch (modal.type) {
+            case 'createPost':
+                return 'Create New Post';
+            case 'createResource':
+                return 'Create New Resource';
+            case 'changePassword':
+                return 'Change Password';
+            case 'updateDetails':
+                return 'Update Profile Details';
+            case 'updateProfile':
+                return 'Update Profile Picture';
+            case 'updateCover':
+                return 'Update Cover Photo';
+            default:
+                return '';
+        }
+    };
+
     return (
-        <div className="min-h-screen w-full bg-gray-50 flex items-center justify-center p-6">
-            <div className="w-full max-w-4xl bg-white rounded-lg shadow-xl overflow-hidden">
+        <div className="min-h-screen w-full bg-gray-50 px-4 py-6 sm:p-6">
+            <div className="w-full max-w-4xl mx-auto bg-white rounded-lg shadow-xl overflow-hidden">
                 {/* Cover Image Section */}
-                <div className="relative h-[200px] w-full bg-gray-200">
+                <div className="relative h-[150px] sm:h-[200px] w-full bg-gray-200">
                     <img
                         src={userdata?.coverImage || ''}
                         alt="Cover"
                         className="w-full h-full object-cover"
                     />
                     <button
-                        className="absolute bottom-4 right-4 p-3 bg-orange-600 text-white rounded-full hover:bg-orange-700 transition duration-300"
-                        onClick={() => {
-                            setIsCreatePost(false);
-                            setIsUpdateDetails(false);
-                            setIsForgetPassword(false);
-                            setIsUpdateProfile(false);
-                            setIsUpdateCover(!isUpdateCover);
-                            setIsCreateResource(false);
-                        }}
+                        className="absolute bottom-3 right-3 sm:bottom-4 sm:right-4 p-2 sm:p-3 bg-[#C84C32] text-white rounded-full hover:bg-[#B33D25] transition duration-300 shadow-lg"
+                        onClick={() => openModal('updateCover')}
                     >
-                        <CameraIcon className="h-6 w-6" />
+                        <CameraIcon className="h-5 w-5 sm:h-6 sm:w-6" />
                     </button>
                 </div>
 
                 {/* Profile Section */}
-                <div className="flex flex-col items-center -mt-16 px-6 pb-8">
+                <div className="flex flex-col items-center -mt-12 sm:-mt-16 px-4 sm:px-6 pb-6 sm:pb-8">
                     {/* Profile Image */}
-                    <div className="relative border-4 border-white w-[160px] h-[160px] rounded-full overflow-hidden shadow-lg z-10">
+                    <div className="relative border-4 border-white w-[120px] h-[120px] sm:w-[160px] sm:h-[160px] rounded-full overflow-hidden shadow-lg z-10">
                         <img
                             className="w-full h-full object-cover"
                             src={userdata?.profileImage || ''}
                             alt="Profile"
                         />
                         <button
-                            className="absolute bottom-2 right-2 p-2 bg-orange-700 text-white rounded-full hover:bg-orange-800 transition duration-300"
-                            onClick={() => {
-                                setIsUpdateProfile(!isUpdateProfile);
-                                setIsCreatePost(false);
-                                setIsForgetPassword(false);
-                                setIsUpdateDetails(false);
-                                setIsUpdateCover(false);
-                                setIsCreateResource(false);
-                            }}
+                            className="absolute bottom-2 right-2 p-1.5 sm:p-2 bg-[#C84C32] text-white rounded-full hover:bg-[#B33D25] transition duration-300 shadow-lg"
+                            onClick={() => openModal('updateProfile')}
                         >
-                            <PencilSquareIcon className="h-4 w-4" />
+                            <PencilSquareIcon className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
                         </button>
                     </div>
 
                     {/* User Info */}
-                    <div className="mt-4 text-center">
-                        <h1 className="text-2xl font-bold text-gray-800">
+                    <div className="mt-3 sm:mt-4 text-center px-4">
+                        <h1 className="text-xl sm:text-2xl font-bold text-gray-800">
                             {userdata?.fullName
                                 ? userdata.fullName
-                                      .split(' ')
-                                      .map(name => name.charAt(0).toUpperCase() + name.slice(1))
-                                      .join(' ')
+                                    .split(' ')
+                                    .map(name => name.charAt(0).toUpperCase() + name.slice(1))
+                                    .join(' ')
                                 : 'User Name'}
-                            ({userdata?.userName || 'username'})
+                            <span className="text-gray-600">({userdata?.userName || 'username'})</span>
                         </h1>
-                        <p className="text-gray-500 mt-1">{userdata?.email || 'email@example.com'}</p>
+                        <p className="text-sm sm:text-base text-gray-500 mt-1">{userdata?.email || 'email@example.com'}</p>
                     </div>
 
                     {/* Stats Section */}
-                    <div className="flex gap-8 mt-6 text-center">
+                    <div className="flex gap-6 sm:gap-8 mt-4 sm:mt-6 text-center">
                         <div>
-                            <p className="font-semibold text-gray-800">Posts</p>
-                            <p className="text-gray-600">{stats.totalPosts}</p>
+                            <p className="text-sm sm:text-base font-semibold text-gray-800">Posts</p>
+                            <p className="text-sm sm:text-base text-gray-600">{stats.totalPosts}</p>
                         </div>
                         <div>
-                            <p className="font-semibold text-gray-800">Followers</p>
-                            <p className="text-gray-600">{stats.totalSubscribers}</p>
+                            <p className="text-sm sm:text-base font-semibold text-gray-800">Followers</p>
+                            <p className="text-sm sm:text-base text-gray-600">{stats.totalSubscribers}</p>
                         </div>
                         <div>
-                            <p className="font-semibold text-gray-800">Following</p>
-                            <p className="text-gray-600">{stats.totalSubscribedChannels}</p>
+                            <p className="text-sm sm:text-base font-semibold text-gray-800">Following</p>
+                            <p className="text-sm sm:text-base text-gray-600">{stats.totalSubscribedChannels}</p>
                         </div>
                     </div>
 
                     {/* Action Buttons */}
-                    <div className="flex flex-wrap gap-4 mt-8 justify-center">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:flex lg:flex-wrap items-center justify-center gap-2 sm:gap-3 mt-6 sm:mt-8 w-full px-4 sm:px-6">
                         <button
-                            className="px-6 py-2 bg-orange-700 text-white rounded-full hover:bg-orange-800 transition-colors"
+                            className="w-full sm:w-auto px-4 sm:px-6 py-2 sm:py-2.5 bg-[#C84C32] text-white rounded-full hover:bg-[#B33D25] transition-colors font-medium text-sm flex items-center justify-center gap-2"
                             onClick={() => navigate('/my-posts')}
                         >
-                            MY Updates
+                            <DocumentTextIcon className="h-4 w-4" />
+                            <span>MY Updates</span>
                         </button>
                         <button
-                            className="px-6 py-2 bg-orange-700 text-white rounded-full hover:bg-orange-800 transition-colors"
-                            onClick={() => {
-                                setIsCreatePost(!isCreatePost);
-                                setIsForgetPassword(false);
-                                setIsUpdateDetails(false);
-                                setIsUpdateProfile(false);
-                                setIsUpdateCover(false);
-                                setIsCreateResource(false);
-                            }}
+                            className="w-full sm:w-auto px-4 sm:px-6 py-2 sm:py-2.5 bg-[#C84C32] text-white rounded-full hover:bg-[#B33D25] transition-colors font-medium text-sm flex items-center justify-center gap-2"
+                            onClick={() => openModal('createPost')}
                         >
-                            Create Update
+                            <PencilSquareIcon className="h-4 w-4" />
+                            <span>Create Update</span>
                         </button>
                         <button
-                            className="px-6 py-2 bg-orange-700 text-white rounded-full hover:bg-orange-800 transition-colors"
-                            onClick={() => {
-                                setIsCreatePost(false);
-                                setIsForgetPassword(false);
-                                setIsUpdateDetails(false);
-                                setIsUpdateProfile(false);
-                                setIsUpdateCover(false);
-                                setIsCreateResource(!isCreateResource);
-                            }}
+                            className="w-full sm:w-auto px-4 sm:px-6 py-2 sm:py-2.5 bg-[#C84C32] text-white rounded-full hover:bg-[#B33D25] transition-colors font-medium text-sm flex items-center justify-center gap-2"
+                            onClick={() => openModal('createResource')}
                         >
-                            Create Resource
+                            <BookOpenIcon className="h-4 w-4" />
+                            <span>Create Resource</span>
                         </button>
                         <button
-                            className="px-6 py-2 bg-gray-700 text-white rounded-full hover:bg-gray-800 transition-colors"
-                            onClick={() => {
-                                setIsCreatePost(false);
-                                setIsUpdateProfile(false);
-                                setIsUpdateCover(false);
-                                setIsForgetPassword(!isForgetPassword);
-                                setIsUpdateDetails(false);
-                                setIsCreateResource(false);
-                            }}
+                            className="w-full sm:w-auto px-4 sm:px-6 py-2 sm:py-2.5 bg-[#44546F] text-white rounded-full hover:bg-[#2C3E5D] transition-colors font-medium text-sm flex items-center justify-center gap-2"
+                            onClick={() => openModal('changePassword')}
                         >
-                            Forget Password
+                            <KeyIcon className="h-4 w-4" />
+                            <span>Change Password</span>
                         </button>
                         <button
-                            className="px-6 py-2 bg-gray-700 text-white rounded-full hover:bg-gray-800 transition-colors"
-                            onClick={() => {
-                                setIsCreatePost(false);
-                                setIsForgetPassword(false);
-                                setIsUpdateProfile(false);
-                                setIsUpdateCover(false);
-                                setIsCreateResource(false);
-                                setIsUpdateDetails(!isUpdateDetails);
-                            }}
+                            className="w-full sm:w-auto px-4 sm:px-6 py-2 sm:py-2.5 bg-[#44546F] text-white rounded-full hover:bg-[#2C3E5D] transition-colors font-medium text-sm flex items-center justify-center gap-2"
+                            onClick={() => openModal('updateDetails')}
                         >
-                            Update Details
+                            <UserCircleIcon className="h-4 w-4" />
+                            <span>Update Details</span>
                         </button>
-                    </div>
-
-                    {/* Forms Section */}
-                    <div className="mt-8 w-full">
-                        <div className="bg-gray-100 p-6 rounded-lg shadow-md">
-                            {isCreatePost && <CreateUpdate isCreatePost={isCreatePost} setIsCreatePost={setIsCreatePost} setUpdateTrigger={setUpdateTrigger} updateTrigger={updateTrigger} />}
-                            {isCreateResource && <CreateResource isCreateResource={isCreateResource} setIsCreateResource={setIsCreateResource} />}
-                            {isForgetPassword && <ChangePassword setUpdateTrigger={setUpdateTrigger} updateTrigger={updateTrigger} />}
-                            {isUpdateDetails && <UpdateAccDetail isUpdateDetails={isUpdateDetails} setIsUpdateDetails={setIsUpdateDetails} setUpdateTrigger={setUpdateTrigger} updateTrigger={updateTrigger} />}
-                            {isUpdateProfile && <ProfileChange setIsUpdateProfile={setIsUpdateProfile} isUpdateProfile={isUpdateProfile} setUpdateTrigger={setUpdateTrigger} updateTrigger={updateTrigger} />}
-                            {isUpdateCover && <ChangeCover isUpdateCover={isUpdateCover} setIsUpdateCover={setIsUpdateCover} updateTrigger={updateTrigger} setUpdateTrigger={setUpdateTrigger} />}
-                        </div>
                     </div>
                 </div>
             </div>
+
+            {/* Modal Popup */}
+            {modal.isOpen && (
+                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+                    <div className="bg-white rounded-lg shadow-xl w-full max-w-md mx-auto overflow-hidden">
+                        {/* Modal Header */}
+                        <div className="flex items-center justify-between px-4 sm:px-6 py-3 sm:py-4 border-b border-gray-200">
+                            <h2 className="text-lg sm:text-xl font-semibold text-gray-800">
+                                {getModalTitle()}
+                            </h2>
+                            <button
+                                onClick={closeModal}
+                                className="p-1 text-gray-500 hover:text-gray-700 transition-colors"
+                            >
+                                <XMarkIcon className="h-5 w-5 sm:h-6 sm:w-6" />
+                            </button>
+                        </div>
+                        
+                        {/* Modal Content */}
+                        <div className="p-4 sm:p-6">
+                            {renderModalContent()}
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }

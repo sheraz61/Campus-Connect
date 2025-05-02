@@ -1,66 +1,17 @@
-import React, { useState, useEffect } from 'react'
-import { useLogin } from '../../Context/Context'
+import React from 'react';
 import UpdateItem from './UpdateItem';
-
-const getPost = async () => {
-  try {
-    const response = await fetch('http://localhost:8000/api/v1/posts/', {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${localStorage.getItem('access')}`,
-        'X-Refresh-Token': `${localStorage.getItem('refresh')}`,
-      },
-    });
-
-    if (!response.ok) {
-      const errorData = await response.json();
-      console.error('Error fetching posts:', errorData);
-      return null;
-    }
-    const data = await response.json();
-    return data;
-
-  } catch (error) {
-    console.error('Network error:', error);
-    return null;
-  }
-};
+import ContentList from '../Common/ContentList';
 
 function Update() {
-  const { isLoggedIn } = useLogin()
-  const [posts, setPosts] = useState([]);
-
-  useEffect(() => {
-    getPost().then((data) => {
-      if (data && data.data) {
-        setPosts(data.data);
-      }
-    });
-  }, []);
-
-  return (
-    <div className='flex flex-wrap'>
-      {isLoggedIn ? (
-        posts.length > 0 ? (
-          posts.map((post, index) => (
-            <UpdateItem
-              key={post._id || post.id || index} // Try multiple possible unique identifiers
-              title={post.title}
-              postImg={post.postImage}
-              discription={post.discription}
-              owner={post.createdBy}
-              _id={post._id}
-            />
-          ))
-        ) : (
-          <p className='p-12'>No posts available</p>
-        )
-      ) : (
-        <p className='p-12'>Please Login First Then See the Updates</p>
-      )}
-    </div>
-  )
+    return (
+        <ContentList
+            type="update"
+            apiEndpoint="posts"
+            ItemComponent={UpdateItem}
+            emptyMessage="No posts available"
+            loginMessage="Please Login First Then See the Updates"
+        />
+    );
 }
 
-export default Update
+export default Update;
