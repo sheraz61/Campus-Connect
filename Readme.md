@@ -57,7 +57,7 @@ Create .env in root:<br>
 - Create your feature branch (git checkout -b feature/amazing-feature)
 - Commit changes (git commit -m 'Add amazing feature')
 - Push to branch (git push origin feature/amazing-feature)
-- Open a Pull Request
+- Open a Pull Requests
 
 
 # 📞 Contact
